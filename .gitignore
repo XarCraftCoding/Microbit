@@ -1,0 +1,5 @@
+# Binary Files
+*.bin
+
+# Windows Icon
+desktop.ini
