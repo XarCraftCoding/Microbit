@@ -1,2 +1,9 @@
-floppya: 1_44=bootSect.bin, status=inserted
+romimage:    file = bios/BIOS-bochs-latest, address=0xfffe0000
+vgaromimage: file = bios/VGABIOS-lgpl-latest
+
+floppya: 1_44 = build/bootSect.bin, status = inserted
 boot: a
+
+log:         info.log
+error:       action = report
+info:        action = report

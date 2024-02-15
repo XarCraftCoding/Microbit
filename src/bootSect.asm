@@ -14,32 +14,26 @@
 	mov bl, 0x01
 	int 0x10
 
-	;; Tele-type Output
-	mov ah, 0x0e				; INT 0x10 / AH 0x0e BIOS Teletype Output
+	;; Tele-type Output Strings
 	mov bx, testString			; Moving Memory Address at 'testString' Into BX Register
 
 	call print_string
 	mov bx, string2
 	call print_string
-	jmp end_pgn
 
-print_string:
-	mov al, [bx]				; Move Character Value at Address in BX Into AL
-	cmp al, 0
-	je end_print				; Jump If Equal (AL = 0) to Halt Label
-	int 0x10					; Print Character in AL
-	add bx, 1					; Move 1 Byte Forward / Get Next Character
-	jmp print_string			; Loop
+	mov dx, 0x12AB				; Sample Hex Number to Print
+	call print_hex
 
-end_print:
-	ret
+	;; End Program
+	jmp $						; Keep Jumping to Here; Neverending Loop
+
+	;; Included Files
+	include 'print_string.asm'
+	include 'print_hex.asm'
 
 	;; Variables
-testString:		db 'TEST', 0xA, 0xD, 0	; 0 / Null to Null Terminate
-string2:		db 'Also a Test!', 0
-
-end_pgn:
-	jmp $						; Keep Jumping to Here; Neverending Loop
+testString:		db 'Char Test: Hello, World!', 0xA, 0xD, 0	; 0 / Null to Null Terminate
+string2:		db 'Hex Test: ', 0	
 
 	;; Boot Sector Magic
 	times 510-($-$$) db 0		; Pad File With 0s Until 510th Byte
