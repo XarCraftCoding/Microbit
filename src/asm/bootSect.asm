@@ -31,7 +31,7 @@ read_disk:
 	jmp 0x1000:0x0			; Never Return From This!
 
 	;; Included Files
-	include 'print_string.asm'
+	include '../print/print_string.asm'
 	include 'disk_load.asm'
 
 	;; Boot Sector Magic
