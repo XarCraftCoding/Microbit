@@ -1,11 +1,8 @@
-# Binary Files
-*.bin
+# Build Directory
+build/
 
 # Windows Icon
 desktop.ini
 
-# Bochs Log File
-info.log
-
-# Bochs BIOS
-bios/
+# Visual Studio Code Settings
+.vscode/

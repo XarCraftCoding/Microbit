@@ -1,13 +1,11 @@
-# Microbit 2.0
+# Microbit
 
-This repository contains the source code of Microbit 2.0.
+This repository contains the source code of Microbit operating system. This operating system currently uses QEMU to run.
 
 ## Building & Running
 
-First, you will have to install **bochs** and **fasm**. Then run these commands:
-```bash
-cd src
-fasm bootSect.asm
-bochs
-```
-These commands should work in both Linux and Windows.
+First, you will have to install **make**. Then run `make install`, than `make` on **project root**.
+
+## Contributing
+
+Feel free create pull requests, we will try to answer them.

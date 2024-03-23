@@ -1,41 +1,40 @@
 ;;;
-;;; Basic Boot Sector That Prints Characters Using BIOS Interrupts
+;;; Simple Boot Loader That Uses INT 13 / AH 2 To Read From Disk Into Memory
 ;;;
-	org 0x7c00					; Origin of Boot Code; Helps Make Sure Addresses Don't Change
+	org 0x7c00				; Origin of Boot Code; Helps Make Sure Addresses Don't Change
+	;; Set Up ES:BX Memory Address / Segment: Offset To Load Sector(s) Into
+	mov bx, 0x1000			; Load Sector To Memory Address 0x1000
+	mov es, bx
+	mov bx, 0x0
 
-	;; Set Video Mode
-	mov ah, 0x00				; INT 0x10 / AH 0x00 = Set Video Mode
-	mov al, 0x03				; 80x25 Text Mode
-	int 0x10
+	; Set Up Disk Read
+	mov dh, 0x0				; Head 0
+	mov dl, 0x0				; Drive 0
+	mov ch, 0x0				; Cylinder 0
+	mov cl, 0x02			; Starting Sector To Read From Disk
 
-	;; Change Color / Palette
-	mov ah, 0x0B
-	mov bh, 0x00
-	mov bl, 0x01
-	int 0x10
+read_disk:
+	mov ah, 0x02			; BIOS INT 13 / AH = 2 Read Disk Sectors
+	mov al, 0x01			;
+	int 0x13				; BIOS Interrupts For Disk Functions
 
-	;; Tele-type Output Strings
-	mov bx, testString			; Moving Memory Address at 'testString' Into BX Register
+	jc read_disk			; Retry If Disk Read Error (Carry Flag Set/ = 1)
 
-	call print_string
-	mov bx, string2
-	call print_string
+	;; Reset Segment Registers for RAM
+	mov ax, 0x1000			
+	mov ds, ax				; Data Segment
+	mov es, ax				; Extra Segment
+	mov fs, ax				; ""
+	mov gs, ax				; ""
+	mov ss, ax				; Stack Segment
 
-	mov dx, 0x12AB				; Sample Hex Number to Print
-	call print_hex
-
-	;; End Program
-	jmp $						; Keep Jumping to Here; Neverending Loop
+	jmp 0x1000:0x0			; Never Return From This!
 
 	;; Included Files
 	include 'print_string.asm'
-	include 'print_hex.asm'
-
-	;; Variables
-testString:		db 'Char Test: Hello, World!', 0xA, 0xD, 0	; 0 / Null to Null Terminate
-string2:		db 'Hex Test: ', 0	
+	include 'disk_load.asm'
 
 	;; Boot Sector Magic
-	times 510-($-$$) db 0		; Pad File With 0s Until 510th Byte
+	times 510-($-$$) db 0	; Pad File With 0s Until 510th Byte
 
-	dw 0xaa55					; BIOS Magic Number in 511th and 512th Bytes
+	dw 0xaa55				; BIOS Magic Number In 511th And 512th Bytes

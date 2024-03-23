@@ -21,14 +21,12 @@ hex_loop:
 	jle move_intoBX
 	add al, 0x7				; To Get Ascii 'A' - 'F'
 
-	;; Move Ascii Char Into BX String
 move_intoBX:
 	mov bx, hexString + 5	; Base Address of 'hexString' + Length of String
 	sub bx, cx				; Subtract Loop Counter
 	mov [bx], al
 	ror dx, 4				; Rotate Right by 4 Bits
-							; 0x12AB -> 0xB12A -> 0xAB12 -> 0x2AB1 -> 0x12AB
-							
+							; 0x12AB -> 0xB12A -> 0xAB12 -> 0x2AB1 -> 0x12AB				
 	add cx, 1				; Increment Counter
 	jmp hex_loop			; Loop For Next Hex Digit in DX
 
