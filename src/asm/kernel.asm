@@ -34,7 +34,6 @@ run_command:
 	mov byte [di], 0			; Null Terminate cmdString From DI
 	mov al, [cmdString]
 	cmp al, 'F'					; (F)ile Table Command / Menu Option
-	cmp al, 'f'
 	jne not_found
 	cmp al, 'N'					; E(n)d Our Current Program
 	je end_program
