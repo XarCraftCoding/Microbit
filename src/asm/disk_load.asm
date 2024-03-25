@@ -4,7 +4,7 @@
 disk_load:
 	push dx						; Store DX On Stack So We Can Check Number Of Sectors Actually Read Later
 
-	mov ah, 0x02				; int 13 / ah=02h, BIOS Read Disk Sectors Into Memory
+	mov ah, 0x02				; INT 13 / AH = 02h, BIOS Read Disk Sectors Into Memory
 	mov al, dh					; Number of Sectors We Want To Read Ex. 1
 	mov ch, 0x00				; Cylinder 0
 	mov dh, 0x00				; Head 0
